@@ -1,0 +1,11 @@
+.score-container {
+    text-align: center;
+}
+
+.score-title {
+    font-size: 30px;
+}
+
+.score-value {
+    font-size: 36px;
+}
