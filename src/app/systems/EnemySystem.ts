@@ -30,8 +30,8 @@ export default class EnemySystem implements ISystem {
 
     // Enemy Behaviour
     enemies: Enemy[] = [];
-    horizontalSpeed = 4;
-    verticalSpeed = 10;
+    horizontalSpeed: number;
+    verticalSpeed: number;
     direction = 1;
 
     tick(): void {
@@ -61,6 +61,8 @@ export default class EnemySystem implements ISystem {
         this.enemyPadding = this.enemyWidth * 0.2;
         this.enemyOffsetX = (this.enemyOffsetX / this.windowWidth) * width;
         this.enemyOffsetY = (this.enemyOffsetY / this.windowHeight) * height;
+        this.horizontalSpeed = width / 256;
+        this.verticalSpeed = height / 32;
         this.windowWidth = width;
         this.windowHeight = height;
     }
@@ -70,6 +72,8 @@ export default class EnemySystem implements ISystem {
         this.windowHeight = height;
         this.enemyWidth = width / 20;
         this.enemyPadding = this.enemyWidth * 0.2;
+        this.horizontalSpeed = width / 256;
+        this.verticalSpeed = height / 32;
         this.enemyOffsetX = 0;
         this.enemyOffsetY = height - this.blockSize.height * 1.5;
     }

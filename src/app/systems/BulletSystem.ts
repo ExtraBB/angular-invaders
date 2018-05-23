@@ -14,7 +14,7 @@ export default class BulletSystem implements ISystem {
     // Bullets
     bullets: Bullet[] = [];
     bulletWidth: number;
-    bulletSpeed = 20;
+    bulletSpeed: number;
 
     tick(): void {
         this.bullets.forEach(bullet => {
@@ -27,12 +27,14 @@ export default class BulletSystem implements ISystem {
 
     initialize(width: number, height: number) {
         this.bulletWidth = width / 300;
+        this.bulletSpeed = height / 30;
         this.windowWidth = width;
         this.windowHeight = height;
     }
 
     adjustToNewScreenSize(width: number, height: number) {
         this.bulletWidth = Math.max(1, width / 300);
+        this.bulletSpeed = height / 30;
         this.bullets.forEach(bullet => {
             bullet.x = (bullet.x / this.windowWidth) * width;
             bullet.y = (bullet.y / this.windowHeight) * height;

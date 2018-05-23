@@ -16,7 +16,7 @@ export default class PlayerSystem implements ISystem {
     // Player
     playerWidth: number;
     playerOffset: number;
-    playerSpeed = 10;
+    playerSpeed: number;
 
     // Game
     spawnBulletCallback: (x: number, y: number) => void;
@@ -45,7 +45,8 @@ export default class PlayerSystem implements ISystem {
     }
     initialize(width: number, height: number) {
         this.playerWidth = width / 20;
-        this.playerOffset = width / 2 - this.playerWidth / 2;
+        this.playerOffset = width / 2 - this.playerWidth / 3;
+        this.playerSpeed = width / 64;
         this.windowWidth = width;
         this.windowHeight = height;
     }
@@ -53,6 +54,7 @@ export default class PlayerSystem implements ISystem {
     adjustToNewScreenSize(width: number, height: number) {
         this.playerOffset = (this.playerOffset / this.windowWidth) * width;
         this.playerWidth = width / 20;
+        this.playerSpeed = width / 64;
         this.windowWidth = width;
         this.windowHeight = height;
     }
