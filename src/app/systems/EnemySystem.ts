@@ -8,12 +8,17 @@ interface Enemy {
 
 export default class EnemySystem implements ISystem {
 
+    // Screen
+    windowWidth: number;
+    windowHeight: number;
+
     // Layout
-    windowPadding = 10;
-    enemyOffsetX = 100;
-    enemyOffsetY = 200;
-    enemyWidth = 20;
-    enemyPadding = this.enemyWidth * 0.2;
+    enemyOffsetX: number;
+    enemyOffsetY: number;
+    enemyWidth: number;
+    enemyPadding: number;
+
+    // Enemy Shape
     enemiesPerRow = 11;
     numRows = 0;
     get blockSize() {
@@ -31,12 +36,12 @@ export default class EnemySystem implements ISystem {
 
     tick(): void {
         // Change direction if needed
-        if (this.enemyOffsetX + this.direction * this.horizontalSpeed < this.windowPadding) {
+        if (this.enemyOffsetX + this.direction * this.horizontalSpeed < 0) {
             this.direction *= -1;
             this.enemyOffsetY -= this.verticalSpeed;
         }
 
-        if (this.enemyOffsetX + this.blockSize.width + this.direction * this.horizontalSpeed > window.innerWidth - this.windowPadding) {
+        if (this.enemyOffsetX + this.blockSize.width + this.direction * this.horizontalSpeed > this.windowWidth) {
             this.direction *= -1;
             this.enemyOffsetY -= this.verticalSpeed;
         }
@@ -51,13 +56,22 @@ export default class EnemySystem implements ISystem {
         }
     }
 
-    setEnemyOffset(offset: number) {
-        this.enemyOffsetX = offset;
-        this.enemyOffsetY = (window.innerHeight - this.blockSize.height) * 0.75;
+    adjustToNewScreenSize(width: number, height: number) {
+        this.enemyWidth = width / 20;
+        this.enemyPadding = this.enemyWidth * 0.2;
+        this.enemyOffsetX = (this.enemyOffsetX / this.windowWidth) * width;
+        this.enemyOffsetY = (this.enemyOffsetY / this.windowHeight) * height;
+        this.windowWidth = width;
+        this.windowHeight = height;
     }
 
-    setWindowPadding(padding: number) {
-        this.windowPadding = padding;
+    initialize(width: number, height: number) {
+        this.windowWidth = width;
+        this.windowHeight = height;
+        this.enemyWidth = width / 20;
+        this.enemyPadding = this.enemyWidth * 0.2;
+        this.enemyOffsetX = 0;
+        this.enemyOffsetY = height / 1.5;
     }
 
     spawnEnemyRow(value: number) {
@@ -77,10 +91,5 @@ export default class EnemySystem implements ISystem {
             this.enemies.splice(index, 1);
             return;
         }
-    }
-
-    setEnemyWidth(width: number) {
-        this.enemyWidth = width;
-        this.enemyPadding = width * 0.2;
     }
 }

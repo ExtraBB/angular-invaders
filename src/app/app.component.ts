@@ -11,9 +11,7 @@ import EnemySystem from './systems/EnemySystem';
 })
 export class AppComponent implements OnInit {
   // Screen
-  windowPadding = 10;
-  windowWidth = window.innerWidth;
-  windowHeight = window.innerHeight;
+  windowPadding = 100;
 
   // Game
   score = 0;
@@ -36,16 +34,19 @@ export class AppComponent implements OnInit {
     this.systems.set('BulletSystem', new BulletSystem());
     this.systems.set('PlayerSystem', new PlayerSystem());
     this.systems.set('EnemySystem', new EnemySystem());
-
-    // Set system variables
-    this.playerSystem.spawnBulletCallback = this.bulletSystem.spawnBullet.bind(this.bulletSystem);
-    this.spawnEnemies();
+    this.initializeSystems();
 
     // Update layout to screen
-    this.calculateDynamicSizes(window.innerWidth, window.innerHeight);
+    this.updateSystemLayouts(window.innerWidth, window.innerHeight);
 
     // Start loop
     setInterval(this.loop.bind(this), 1000 / 60);
+  }
+
+  initializeSystems() {
+    this.systems.forEach(system => system.initialize(window.innerWidth, window.innerHeight));
+    this.playerSystem.spawnBulletCallback = this.bulletSystem.spawnBullet.bind(this.bulletSystem);
+    this.spawnEnemies();
   }
 
   spawnEnemies() {
@@ -60,25 +61,14 @@ export class AppComponent implements OnInit {
     this.systems.forEach(system => system.tick());
   }
 
-  calculateDynamicSizes(windowWidth: number, windowHeight: number): void {
-    // Update Player
-    this.playerSystem.setPlayerWidth(window.innerWidth / 20);
-    this.playerSystem.setWindowPadding(this.windowPadding);
-    this.playerSystem.setPlayerOffset((this.playerSystem.playerOffset / this.windowWidth) * windowWidth);
-
-    // Update Enemies
-    this.enemySystem.setEnemyWidth(this.playerSystem.playerWidth);
-    this.enemySystem.setWindowPadding(this.windowPadding);
-    this.enemySystem.setEnemyOffset((this.enemySystem.enemyOffsetX / this.windowWidth) * windowWidth);
-
-    // Update Bullets
-    this.bulletSystem.setBulletWidth(Math.max(1, this.playerSystem.playerWidth / 15));
+  updateSystemLayouts(windowWidth: number, windowHeight: number): void {
+    this.systems.forEach(system => {
+      system.adjustToNewScreenSize(windowWidth - 2 * this.windowPadding, windowHeight - 2 * this.windowPadding);
+    });
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event): void {
-    this.calculateDynamicSizes(event.target.innerWidth, event.target.innerHeight);
-    this.windowWidth = event.target.innerWidth;
-    this.windowHeight = event.target.innerHeight;
+    this.updateSystemLayouts(event.target.innerWidth, event.target.innerHeight);
   }
 }

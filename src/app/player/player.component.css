@@ -1,4 +1,5 @@
 .player {
     filter: invert(100%);
     position: absolute; 
+    bottom: 0px;
 }

@@ -6,6 +6,12 @@ interface Bullet {
 }
 
 export default class BulletSystem implements ISystem {
+
+    // Screen
+    windowWidth = window.innerWidth;
+    windowHeight = window.innerHeight;
+
+    // Bullets
     bullets: Bullet[] = [];
     bulletWidth = 2;
     bulletSpeed = 20;
@@ -17,6 +23,20 @@ export default class BulletSystem implements ISystem {
                 this.despawnBullet(bullet);
             }
         });
+    }
+
+    initialize(width: number, height: number) {
+        
+    }
+
+    adjustToNewScreenSize(width: number, height: number) {
+        this.bulletWidth = Math.max(1, width / 300);
+        this.bullets.forEach(bullet => {
+            bullet.x = (bullet.x / this.windowWidth) * width;
+            bullet.y = (bullet.y / this.windowHeight) * height;
+        });
+        this.windowWidth = width;
+        this.windowHeight = height;
     }
 
     spawnBullet(x: number, y: number): void {

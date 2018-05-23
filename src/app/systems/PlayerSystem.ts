@@ -3,6 +3,10 @@ import { HostListener } from '@angular/core';
 
 export default class PlayerSystem implements ISystem {
 
+    // Screen
+    windowWidth = window.innerWidth;
+    windowHeight = window.innerHeight;
+
     // Input
     movingLeft = false;
     movingRight = false;
@@ -15,7 +19,6 @@ export default class PlayerSystem implements ISystem {
     playerSpeed = 10;
 
     // Game
-    windowPadding = 0;
     spawnBulletCallback: (x: number, y: number) => void;
 
     constructor() {
@@ -25,20 +28,30 @@ export default class PlayerSystem implements ISystem {
 
     tick(): void {
         if (this.movingLeft) {
-            this.playerOffset = Math.max(this.windowPadding, this.playerOffset - this.playerSpeed);
+            this.playerOffset = Math.max(0, this.playerOffset - this.playerSpeed);
         }
         if (this.movingRight) {
-            this.playerOffset = Math.min(window.innerWidth - this.windowPadding - this.playerWidth, this.playerOffset + this.playerSpeed);
+            this.playerOffset = Math.min(this.windowWidth - this.playerWidth, this.playerOffset + this.playerSpeed);
         }
         if (this.shooting) {
             if (this.ticksShooting % 10 === 0) {
                 this.spawnBulletCallback(
                     this.playerOffset + this.playerWidth / 2,
-                    this.windowPadding * 3
+                    0
                 );
             }
             this.ticksShooting++;
         }
+    }
+    initialize(width: number, height: number) {
+        
+    }
+
+    adjustToNewScreenSize(width: number, height: number) {
+        this.playerOffset = (this.playerOffset / this.windowWidth) * width;
+        this.playerWidth = width / 20;
+        this.windowWidth = width;
+        this.windowHeight = height;
     }
 
     setPlayerWidth(width: number) {
@@ -47,10 +60,6 @@ export default class PlayerSystem implements ISystem {
 
     setPlayerOffset(offset: number) {
         this.playerOffset = offset;
-    }
-
-    setWindowPadding(padding: number) {
-        this.windowPadding = padding;
     }
 
     onKeydownHandler(evt: KeyboardEvent) {

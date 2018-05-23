@@ -1,5 +1,9 @@
-<app-score class="score" title="Score" score={{score}}></app-score>
-<app-score class="highscore" title="High Score" score={{highscore}}></app-score>
-<app-player width={{playerSystem.playerWidth}} offset={{playerSystem.playerOffset}} windowPadding={{playerSystem.windowPadding}} (spawnBullet)="spawnBullet($event)"></app-player>
-<app-bullet *ngFor="let bullet of bulletSystem.bullets" width={{bulletSystem.bulletWidth}} x={{bullet.x}} y={{bullet.y}}></app-bullet>
-<app-enemy *ngFor="let enemy of enemySystem.enemies" width={{enemySystem.enemyWidth}} x={{enemy.x}} y={{enemy.y}}></app-enemy>
+<div class="outer-container">
+    <div class="inner-container">
+        <app-score class="score" title="Score" score={{score}}></app-score>
+        <app-score class="highscore" title="High Score" score={{highscore}}></app-score>
+        <app-player width={{playerSystem.playerWidth}} offset={{playerSystem.playerOffset}} windowPadding={{playerSystem.windowPadding}} (spawnBullet)="spawnBullet($event)"></app-player>
+        <app-bullet *ngFor="let bullet of bulletSystem.bullets" width={{bulletSystem.bulletWidth}} x={{bullet.x}} y={{bullet.y}}></app-bullet>
+        <app-enemy *ngFor="let enemy of enemySystem.enemies" width={{enemySystem.enemyWidth}} x={{enemy.x}} y={{enemy.y}}></app-enemy>
+    </div>
+</div>
