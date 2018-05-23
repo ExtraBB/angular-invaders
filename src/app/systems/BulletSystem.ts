@@ -8,12 +8,12 @@ interface Bullet {
 export default class BulletSystem implements ISystem {
 
     // Screen
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
+    windowWidth: number;
+    windowHeight: number;
 
     // Bullets
     bullets: Bullet[] = [];
-    bulletWidth = 2;
+    bulletWidth: number;
     bulletSpeed = 20;
 
     tick(): void {
@@ -26,7 +26,9 @@ export default class BulletSystem implements ISystem {
     }
 
     initialize(width: number, height: number) {
-        
+        this.bulletWidth = width / 300;
+        this.windowWidth = width;
+        this.windowHeight = height;
     }
 
     adjustToNewScreenSize(width: number, height: number) {
@@ -51,9 +53,5 @@ export default class BulletSystem implements ISystem {
         if (index !== -1) {
             this.bullets.splice(index, 1);
         }
-    }
-
-    setBulletWidth(width: number): void {
-        this.bulletWidth = width;
     }
 }

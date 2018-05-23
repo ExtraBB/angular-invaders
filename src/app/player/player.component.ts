@@ -8,7 +8,6 @@ import { Component, OnInit, Input, Output, HostListener, EventEmitter } from '@a
 export class PlayerComponent implements OnInit {
   @Input() width;
   @Input() offset;
-  @Input() windowPadding;
 
   constructor() { }
 

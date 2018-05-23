@@ -4,8 +4,8 @@ import { HostListener } from '@angular/core';
 export default class PlayerSystem implements ISystem {
 
     // Screen
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
+    windowWidth: number;
+    windowHeight: number;
 
     // Input
     movingLeft = false;
@@ -14,8 +14,8 @@ export default class PlayerSystem implements ISystem {
     ticksShooting = 0;
 
     // Player
-    playerWidth = 20;
-    playerOffset = window.innerWidth / 2;
+    playerWidth: number;
+    playerOffset: number;
     playerSpeed = 10;
 
     // Game
@@ -44,7 +44,10 @@ export default class PlayerSystem implements ISystem {
         }
     }
     initialize(width: number, height: number) {
-        
+        this.playerWidth = width / 20;
+        this.playerOffset = width / 2 - this.playerWidth / 2;
+        this.windowWidth = width;
+        this.windowHeight = height;
     }
 
     adjustToNewScreenSize(width: number, height: number) {
@@ -52,14 +55,6 @@ export default class PlayerSystem implements ISystem {
         this.playerWidth = width / 20;
         this.windowWidth = width;
         this.windowHeight = height;
-    }
-
-    setPlayerWidth(width: number) {
-        this.playerWidth = width;
-    }
-
-    setPlayerOffset(offset: number) {
-        this.playerOffset = offset;
     }
 
     onKeydownHandler(evt: KeyboardEvent) {

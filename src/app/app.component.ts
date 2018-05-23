@@ -11,7 +11,9 @@ import EnemySystem from './systems/EnemySystem';
 })
 export class AppComponent implements OnInit {
   // Screen
-  windowPadding = 100;
+  windowPadding: number;
+  playWidth: number;
+  playHeight: number;
 
   // Game
   score = 0;
@@ -30,23 +32,23 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Set play area
+    this.updatePlayArea(window.innerWidth, window.innerHeight);
+
     // Create systems
     this.systems.set('BulletSystem', new BulletSystem());
     this.systems.set('PlayerSystem', new PlayerSystem());
     this.systems.set('EnemySystem', new EnemySystem());
     this.initializeSystems();
 
-    // Update layout to screen
-    this.updateSystemLayouts(window.innerWidth, window.innerHeight);
-
     // Start loop
     setInterval(this.loop.bind(this), 1000 / 60);
   }
 
   initializeSystems() {
+    this.spawnEnemies();
     this.systems.forEach(system => system.initialize(window.innerWidth, window.innerHeight));
     this.playerSystem.spawnBulletCallback = this.bulletSystem.spawnBullet.bind(this.bulletSystem);
-    this.spawnEnemies();
   }
 
   spawnEnemies() {
@@ -61,10 +63,15 @@ export class AppComponent implements OnInit {
     this.systems.forEach(system => system.tick());
   }
 
+  updatePlayArea(windowWidth: number, windowHeight: number) {
+    this.windowPadding = windowWidth / 50;
+    this.playWidth = windowWidth - 2 * this.windowPadding;
+    this.playHeight = windowHeight - 2 * this.windowPadding;
+  }
+
   updateSystemLayouts(windowWidth: number, windowHeight: number): void {
-    this.systems.forEach(system => {
-      system.adjustToNewScreenSize(windowWidth - 2 * this.windowPadding, windowHeight - 2 * this.windowPadding);
-    });
+    this.updatePlayArea(windowWidth, windowHeight);
+    this.systems.forEach(system => system.adjustToNewScreenSize(this.playWidth, this.playHeight));
   }
 
   @HostListener('window:resize', ['$event'])

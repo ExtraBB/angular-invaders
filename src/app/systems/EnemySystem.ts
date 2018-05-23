@@ -71,16 +71,12 @@ export default class EnemySystem implements ISystem {
         this.enemyWidth = width / 20;
         this.enemyPadding = this.enemyWidth * 0.2;
         this.enemyOffsetX = 0;
-        this.enemyOffsetY = height / 1.5;
+        this.enemyOffsetY = height - this.blockSize.height * 1.5;
     }
 
     spawnEnemyRow(value: number) {
         for (let i = 0; i < this.enemiesPerRow; i++) {
-            this.enemies.push({
-                x: this.enemyOffsetX + i * (this.enemyWidth + this.enemyPadding),
-                y: 200 + Math.floor((this.enemies.length / this.enemiesPerRow)) * this.enemyWidth,
-                value: value
-            });
+            this.enemies.push({ x: 0, y: 0, value: value });
         }
         this.numRows++;
     }
