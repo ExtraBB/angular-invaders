@@ -89,6 +89,11 @@ export class AppComponent implements OnInit {
 
   checkForCollisions() {
     this.bulletSystem.bullets.forEach(bullet => {
+      // Early elimination
+      if (!this.enemyBlockCollidesWithBullet(bullet)) {
+        return;
+      }
+
       this.enemySystem.enemies.forEach(enemy => {
         if (enemy.alive && this.enemyCollidesWithBullet(enemy, bullet)) {
           this.bulletSystem.despawnBullet(bullet);
@@ -101,6 +106,12 @@ export class AppComponent implements OnInit {
 
   enemyCollidesWithBullet(enemy: Enemy, bullet: Bullet) {
     const rect = this.enemySystem.getRectForEnemy(enemy);
+    return (bullet.x >= rect.x && bullet.x <= rect.x + rect.width) &&
+      (bullet.y >= rect.y && bullet.y <= rect.y + rect.height);
+  }
+
+  enemyBlockCollidesWithBullet(bullet: Bullet) {
+    const rect = this.enemySystem.blockSize;
     return (bullet.x >= rect.x && bullet.x <= rect.x + rect.width) &&
       (bullet.y >= rect.y && bullet.y <= rect.y + rect.height);
   }

@@ -25,6 +25,8 @@ export default class EnemySystem implements ISystem {
     numRows = 0;
     get blockSize() {
         return {
+            x: this.enemyOffsetX,
+            y: this.enemyOffsetY,
             width: this.enemyWidth * this.enemiesPerRow + this.enemyPadding * (this.enemiesPerRow - 1),
             height: this.enemyWidth * this.numRows
         };
