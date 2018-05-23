@@ -1,4 +1,4 @@
-<div *ngIf="playing" class="outer-container" [style.padding]="windowPadding + 'px'">
+<div *ngIf="playing" class="outer-container" [style.padding]="windowPadding + 'px'" [style.background-color]="backgroundColor">
     <div class="inner-container">
         <app-score class="score" title="Score" score={{score}}></app-score>
         <app-lives class="lives" width={{livesWidth}} numberOfLives={{lives}}></app-lives>

@@ -92,6 +92,11 @@ export default class EnemySystem implements ISystem {
         this.enemyOffsetY = height - this.blockSize.height;
     }
 
+    resetEnemyPositions(): void {
+        this.enemyOffsetX = 0;
+        this.enemyOffsetY = this.windowHeight - this.blockSize.height;
+    }
+
     spawnEnemyBullet() {
         const livingEnemies = this.enemies.filter(enemy => enemy.alive);
         const shootingEnemyIndex = Math.floor(Math.random() * livingEnemies.length);

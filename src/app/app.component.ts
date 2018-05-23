@@ -10,11 +10,16 @@ import EnemySystem, { Enemy } from './systems/EnemySystem';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  readonly BACKGROUND_COLOR: string = '#1A1A1A';
+  readonly BACKGROUND_FLASH_COLOR: string = '#00FF41';
+
   // Screen
   windowPadding: number;
   playWidth: number;
   playHeight: number;
   livesWidth: number;
+  backgroundColor = this.BACKGROUND_COLOR;
+  flashingTicks = 0;
 
   // Game
   score: number;
@@ -41,6 +46,8 @@ export class AppComponent implements OnInit {
     this.playing = true;
     this.score = 0;
     this.lives = 3;
+    this.backgroundColor = this.BACKGROUND_COLOR;
+    this.flashingTicks = 0;
 
     // Set play area
     this.updatePlayArea(window.innerWidth, window.innerHeight);
@@ -81,6 +88,8 @@ export class AppComponent implements OnInit {
     } else if (this.lives < 1) {
       this.endGame();
     }
+
+    this.handleScreenFlash();
   }
 
   endGame(): void {
@@ -89,6 +98,22 @@ export class AppComponent implements OnInit {
     }
     this.playing = false;
     clearInterval(this.timer);
+  }
+
+  loseLife(): void {
+    this.enemySystem.resetEnemyPositions();
+    this.lives--;
+    this.backgroundColor = '#00FF41';
+  }
+
+  handleScreenFlash() {
+    if (this.backgroundColor === this.BACKGROUND_FLASH_COLOR) {
+      this.flashingTicks++;
+    }
+    if (this.flashingTicks > 3) {
+      this.backgroundColor = this.BACKGROUND_COLOR;
+      this.flashingTicks = 0;
+    }
   }
 
   checkForCollisions() {
@@ -128,7 +153,7 @@ export class AppComponent implements OnInit {
         bullet.y >= rect.y &&
         bullet.y <= rect.y + rect.height) {
           this.bulletSystem.despawnEnemyBullet(bullet);
-          this.lives--;
+          this.loseLife();
         }
     });
   }
