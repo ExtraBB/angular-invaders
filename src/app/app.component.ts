@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
 
   initializeSystems() {
     this.spawnEnemies();
-    this.systems.forEach(system => system.initialize(window.innerWidth, window.innerHeight));
+    this.systems.forEach(system => system.initialize(this.playWidth, this.playHeight));
     this.playerSystem.spawnBulletCallback = this.bulletSystem.spawnBullet.bind(this.bulletSystem);
   }
 
