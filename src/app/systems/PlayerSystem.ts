@@ -59,6 +59,15 @@ export default class PlayerSystem implements ISystem {
         this.windowHeight = height;
     }
 
+    getPlayerRect() {
+        return {
+            x: this.playerOffset,
+            y: 0,
+            width: this.playerWidth,
+            height: this.playerWidth * 0.5
+        };
+    }
+
     onKeydownHandler(evt: KeyboardEvent) {
         switch (evt.key) {
             case 'ArrowLeft': {

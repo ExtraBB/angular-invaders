@@ -38,6 +38,10 @@ export default class EnemySystem implements ISystem {
     verticalSpeed: number;
     direction = 1;
 
+    // Bullets
+    spawnBulletCallback: (x: number, y: number) => void;
+    ticksSinceBullet = 0;
+
     tick(): void {
         // Change direction if needed
         if (this.enemyOffsetX + this.direction * this.horizontalSpeed < 0) {
@@ -57,6 +61,12 @@ export default class EnemySystem implements ISystem {
                 this.enemies[row * this.enemiesPerRow + col].x = this.enemyOffsetX + col * (this.enemyWidth + this.enemyPadding);
                 this.enemies[row * this.enemiesPerRow + col].y = this.enemyOffsetY + row * this.enemyWidth;
             }
+        }
+
+        this.ticksSinceBullet++;
+        if (this.ticksSinceBullet >= 60) {
+            this.spawnEnemyBullet();
+            this.ticksSinceBullet = 0;
         }
     }
 
@@ -80,6 +90,12 @@ export default class EnemySystem implements ISystem {
         this.verticalSpeed = height / 32;
         this.enemyOffsetX = 0;
         this.enemyOffsetY = height - this.blockSize.height;
+    }
+
+    spawnEnemyBullet() {
+        const livingEnemies = this.enemies.filter(enemy => enemy.alive);
+        const shootingEnemyIndex = Math.floor(Math.random() * livingEnemies.length);
+        this.spawnBulletCallback(livingEnemies[shootingEnemyIndex].x, livingEnemies[shootingEnemyIndex].y);
     }
 
     spawnEnemyRow(value: number, imagePath: string) {

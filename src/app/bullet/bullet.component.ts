@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BulletComponent implements OnInit {
 
   @Input() width;
+  @Input() height;
   @Input() x;
   @Input() y;
 

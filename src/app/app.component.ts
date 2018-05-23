@@ -59,6 +59,7 @@ export class AppComponent implements OnInit {
     this.spawnEnemies();
     this.systems.forEach(system => system.initialize(this.playWidth, this.playHeight));
     this.playerSystem.spawnBulletCallback = this.bulletSystem.spawnBullet.bind(this.bulletSystem);
+    this.enemySystem.spawnBulletCallback = this.bulletSystem.spawnEnemyBullet.bind(this.bulletSystem);
   }
 
   spawnEnemies() {
@@ -72,9 +73,12 @@ export class AppComponent implements OnInit {
   loop(): void {
     this.systems.forEach(system => system.tick());
     this.checkForCollisions();
+    this.checkForPlayerCollisions();
     if (this.enemySystem.enemies.every(enemy => !enemy.alive)) {
       this.endGame();
-    } else if (this.enemySystem.enemies.reduce((a, b) => a.y < b.y ? a : b).y <  0) {
+    } else if (this.enemySystem.enemies.reduce((a, b) => a.y < b.y ? a : b).y < 0) {
+      this.endGame();
+    } else if (this.lives < 1) {
       this.endGame();
     }
   }
@@ -114,6 +118,19 @@ export class AppComponent implements OnInit {
     const rect = this.enemySystem.blockSize;
     return (bullet.x >= rect.x && bullet.x <= rect.x + rect.width) &&
       (bullet.y >= rect.y && bullet.y <= rect.y + rect.height);
+  }
+
+  checkForPlayerCollisions() {
+    const rect = this.playerSystem.getPlayerRect();
+    this.bulletSystem.enemyBullets.forEach(bullet => {
+      if (bullet.x >= rect.x &&
+        bullet.x <= rect.x + rect.width &&
+        bullet.y >= rect.y &&
+        bullet.y <= rect.y + rect.height) {
+          this.bulletSystem.despawnEnemyBullet(bullet);
+          this.lives--;
+        }
+    });
   }
 
   updatePlayArea(windowWidth: number, windowHeight: number) {
