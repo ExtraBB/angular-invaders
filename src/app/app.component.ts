@@ -14,11 +14,13 @@ export class AppComponent implements OnInit {
   windowPadding: number;
   playWidth: number;
   playHeight: number;
+  livesWidth: number;
 
   // Game
-  score = 0;
+  score: number;
   highscore = 0;
   playing = false;
+  lives: number;
   timer: number;
 
   // Systems
@@ -37,6 +39,8 @@ export class AppComponent implements OnInit {
 
   startGame() {
     this.playing = true;
+    this.score = 0;
+    this.lives = 3;
 
     // Set play area
     this.updatePlayArea(window.innerWidth, window.innerHeight);
@@ -105,6 +109,7 @@ export class AppComponent implements OnInit {
     this.windowPadding = windowWidth / 50;
     this.playWidth = windowWidth - 2 * this.windowPadding;
     this.playHeight = windowHeight - 2 * this.windowPadding;
+    this.livesWidth = windowWidth * 0.4;
   }
 
   updateSystemLayouts(windowWidth: number, windowHeight: number): void {

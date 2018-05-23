@@ -6,6 +6,7 @@ import { ScoreComponent } from './score/score.component';
 import { PlayerComponent } from './player/player.component';
 import { BulletComponent } from './bullet/bullet.component';
 import { EnemyComponent } from './enemy/enemy.component';
+import { LivesComponent } from './lives/lives.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { EnemyComponent } from './enemy/enemy.component';
     ScoreComponent,
     PlayerComponent,
     BulletComponent,
-    EnemyComponent
+    EnemyComponent,
+    LivesComponent
   ],
   imports: [
     BrowserModule
