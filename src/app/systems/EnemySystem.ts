@@ -5,6 +5,7 @@ export interface Enemy {
     y: number;
     value: number;
     alive: boolean;
+    imagePath: string;
 }
 
 export default class EnemySystem implements ISystem {
@@ -79,9 +80,9 @@ export default class EnemySystem implements ISystem {
         this.enemyOffsetY = height - this.blockSize.height;
     }
 
-    spawnEnemyRow(value: number) {
+    spawnEnemyRow(value: number, imagePath: string) {
         for (let i = 0; i < this.enemiesPerRow; i++) {
-            this.enemies.push({ x: 0, y: 0, value: value, alive: true });
+            this.enemies.push({ x: 0, y: 0, value: value, alive: true, imagePath: imagePath });
         }
         this.numRows++;
     }

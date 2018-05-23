@@ -4,7 +4,7 @@
         <app-player width={{playerSystem.playerWidth}} offset={{playerSystem.playerOffset}} (spawnBullet)="spawnBullet($event)"></app-player>
         <app-bullet *ngFor="let bullet of bulletSystem.bullets" width={{bulletSystem.bulletWidth}} x={{bullet.x}} y={{bullet.y}}></app-bullet>
         <div *ngFor="let enemy of enemySystem.enemies">
-            <app-enemy *ngIf="enemy.alive" width={{enemySystem.enemyWidth}} x={{enemy.x}} y={{enemy.y}}></app-enemy>
+            <app-enemy *ngIf="enemy.alive" imagePath={{enemy.imagePath}} width={{enemySystem.enemyWidth}} x={{enemy.x}} y={{enemy.y}}></app-enemy>
         </div>
     </div>
 </div>

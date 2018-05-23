@@ -58,11 +58,11 @@ export class AppComponent implements OnInit {
   }
 
   spawnEnemies() {
-    this.enemySystem.spawnEnemyRow(30);
-    this.enemySystem.spawnEnemyRow(20);
-    this.enemySystem.spawnEnemyRow(20);
-    this.enemySystem.spawnEnemyRow(10);
-    this.enemySystem.spawnEnemyRow(10);
+    this.enemySystem.spawnEnemyRow(10, 'assets/invader1.svg');
+    this.enemySystem.spawnEnemyRow(10, 'assets/invader1.svg');
+    this.enemySystem.spawnEnemyRow(20, 'assets/invader2.svg');
+    this.enemySystem.spawnEnemyRow(20, 'assets/invader2.svg');
+    this.enemySystem.spawnEnemyRow(30, 'assets/invader3.svg');
   }
 
   loop(): void {
