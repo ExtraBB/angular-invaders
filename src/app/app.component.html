@@ -1,11 +1,15 @@
-<div class="outer-container" [style.padding]="windowPadding + 'px'">
+<div *ngIf="playing" class="outer-container" [style.padding]="windowPadding + 'px'">
     <div class="inner-container">
         <app-score class="score" title="Score" score={{score}}></app-score>
-        <app-score class="highscore" title="High Score" score={{highscore}}></app-score>
         <app-player width={{playerSystem.playerWidth}} offset={{playerSystem.playerOffset}} (spawnBullet)="spawnBullet($event)"></app-player>
         <app-bullet *ngFor="let bullet of bulletSystem.bullets" width={{bulletSystem.bulletWidth}} x={{bullet.x}} y={{bullet.y}}></app-bullet>
         <div *ngFor="let enemy of enemySystem.enemies">
             <app-enemy *ngIf="enemy.alive" width={{enemySystem.enemyWidth}} x={{enemy.x}} y={{enemy.y}}></app-enemy>
         </div>
     </div>
+</div>
+
+<div *ngIf="!playing" (click)="startGame();">
+    <app-score class="highscore" title="High Score" score={{highscore}}></app-score>
+    <div class="play-button"> Play </div>
 </div>

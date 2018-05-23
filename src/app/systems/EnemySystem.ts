@@ -76,7 +76,7 @@ export default class EnemySystem implements ISystem {
         this.horizontalSpeed = width / 256;
         this.verticalSpeed = height / 32;
         this.enemyOffsetX = 0;
-        this.enemyOffsetY = height - this.blockSize.height * 1.5;
+        this.enemyOffsetY = height - this.blockSize.height;
     }
 
     spawnEnemyRow(value: number) {

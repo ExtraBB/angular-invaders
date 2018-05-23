@@ -21,3 +21,22 @@
     height: 100%;
     width: 100%;
 }
+
+.play-button {
+    font-size: 6vw;
+    border: 2px solid white;
+    border-radius: 5%;
+    width: 14vw;
+    padding: 5px 10px;
+    margin: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.play-button:hover {
+    color: #00FF41;
+    cursor: pointer;
+    border: 2px solid #00FF41;
+}

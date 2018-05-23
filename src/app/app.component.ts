@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
   // Game
   score = 0;
   highscore = 0;
+  playing = false;
+  timer: number;
 
   // Systems
   systems: Map<string, ISystem> = new Map<string, ISystem>();
@@ -31,7 +33,11 @@ export class AppComponent implements OnInit {
     return (this.systems.get('EnemySystem') as EnemySystem);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  startGame() {
+    this.playing = true;
+
     // Set play area
     this.updatePlayArea(window.innerWidth, window.innerHeight);
 
@@ -42,7 +48,7 @@ export class AppComponent implements OnInit {
     this.initializeSystems();
 
     // Start loop
-    setInterval(this.loop.bind(this), 1000 / 60);
+    this.timer = setInterval(this.loop.bind(this), 1000 / 60);
   }
 
   initializeSystems() {
@@ -73,6 +79,8 @@ export class AppComponent implements OnInit {
     if (this.score > this.highscore) {
       this.highscore = this.score;
     }
+    this.playing = false;
+    clearInterval(this.timer);
   }
 
   checkForCollisions() {
