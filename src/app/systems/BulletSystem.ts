@@ -1,6 +1,6 @@
 import ISystem from './ISystem';
 
-interface Bullet {
+export interface Bullet {
     x: number;
     y: number;
 }

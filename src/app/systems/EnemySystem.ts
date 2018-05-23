@@ -1,9 +1,10 @@
 import ISystem from './ISystem';
 
-interface Enemy {
+export interface Enemy {
     x: number;
     y: number;
     value: number;
+    alive: boolean;
 }
 
 export default class EnemySystem implements ISystem {
@@ -80,7 +81,7 @@ export default class EnemySystem implements ISystem {
 
     spawnEnemyRow(value: number) {
         for (let i = 0; i < this.enemiesPerRow; i++) {
-            this.enemies.push({ x: 0, y: 0, value: value });
+            this.enemies.push({ x: 0, y: 0, value: value, alive: true });
         }
         this.numRows++;
     }
@@ -91,5 +92,17 @@ export default class EnemySystem implements ISystem {
             this.enemies.splice(index, 1);
             return;
         }
+    }
+
+    getRectForEnemy(enemy: Enemy) {
+        const index = this.enemies.indexOf(enemy);
+        const row = Math.floor(index / this.enemiesPerRow);
+        const col = index % this.enemiesPerRow;
+        return {
+            x: this.enemyOffsetX + col * (this.enemyWidth + this.enemyPadding),
+            y: this.enemyOffsetY + row * this.enemyWidth,
+            width: this.enemyWidth,
+            height: this.enemyWidth * 0.6
+        };
     }
 }

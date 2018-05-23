@@ -1,8 +1,8 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import ISystem from './systems/ISystem';
-import BulletSystem from './systems/BulletSystem';
+import BulletSystem, { Bullet } from './systems/BulletSystem';
 import PlayerSystem from './systems/PlayerSystem';
-import EnemySystem from './systems/EnemySystem';
+import EnemySystem, { Enemy } from './systems/EnemySystem';
 
 @Component({
   selector: 'app-root',
@@ -61,6 +61,36 @@ export class AppComponent implements OnInit {
 
   loop(): void {
     this.systems.forEach(system => system.tick());
+    this.checkForCollisions();
+    if (this.enemySystem.enemies.every(enemy => !enemy.alive)) {
+      this.endGame();
+    } else if (this.enemySystem.enemies.reduce((a, b) => a.y < b.y ? a : b).y <  0) {
+      this.endGame();
+    }
+  }
+
+  endGame(): void {
+    if (this.score > this.highscore) {
+      this.highscore = this.score;
+    }
+  }
+
+  checkForCollisions() {
+    this.bulletSystem.bullets.forEach(bullet => {
+      this.enemySystem.enemies.forEach(enemy => {
+        if (enemy.alive && this.enemyCollidesWithBullet(enemy, bullet)) {
+          this.bulletSystem.despawnBullet(bullet);
+          enemy.alive = false;
+          this.score += enemy.value;
+        }
+      });
+    });
+  }
+
+  enemyCollidesWithBullet(enemy: Enemy, bullet: Bullet) {
+    const rect = this.enemySystem.getRectForEnemy(enemy);
+    return (bullet.x >= rect.x && bullet.x <= rect.x + rect.width) &&
+      (bullet.y >= rect.y && bullet.y <= rect.y + rect.height);
   }
 
   updatePlayArea(windowWidth: number, windowHeight: number) {
