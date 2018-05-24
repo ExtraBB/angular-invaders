@@ -3,6 +3,8 @@ import ISystem from './systems/ISystem';
 import BulletSystem, { Bullet } from './systems/BulletSystem';
 import PlayerSystem from './systems/PlayerSystem';
 import EnemySystem, { Enemy } from './systems/EnemySystem';
+import { HighscoreService, Score } from './services/highscore.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +25,7 @@ export class AppComponent implements OnInit {
 
   // Game
   score: number;
-  highscore = 0;
+  highscore$: Observable<Score>;
   playing = false;
   lives: number;
   timer: number;
@@ -40,7 +42,11 @@ export class AppComponent implements OnInit {
     return (this.systems.get('EnemySystem') as EnemySystem);
   }
 
-  ngOnInit(): void {}
+  constructor(private highscoreService: HighscoreService) { }
+
+  ngOnInit(): void {
+    this.highscore$ = this.highscoreService.getHighscore();
+  }
 
   startGame() {
     this.playing = true;
@@ -93,9 +99,7 @@ export class AppComponent implements OnInit {
   }
 
   endGame(): void {
-    if (this.score > this.highscore) {
-      this.highscore = this.score;
-    }
+    this.highscoreService.uploadHighscore(this.score).subscribe();
     this.playing = false;
     clearInterval(this.timer);
   }

@@ -23,7 +23,7 @@
 
 <div *ngIf="!playing" (click)="startGame();">
     <app-score class="score" title="Score" score={{score}}></app-score>    
-    <app-score class="highscore" title="High Score" score={{highscore}}></app-score>
+    <app-score class="highscore" title="High Score" [score]="(highscore$ | async)?.score"></app-score>
     <div class="play-button"> Play </div>
     <div class="created-by">Created by <a class="link" href="http://www.brunocarvalhal.com">Bruno Carvalhal</a></div>
 </div>
