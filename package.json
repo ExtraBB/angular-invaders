@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "git pull origin master && ng build --prod"
+    "deploy": "git checkout @ -- package-lock.json && git pull origin master && ng build --prod"
   },
   "private": true,
   "dependencies": {
