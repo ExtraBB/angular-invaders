@@ -1,5 +1,7 @@
 import ISystem from './ISystem';
 import { HostListener } from '@angular/core';
+import { fromEvent, Subscription } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 export default class PlayerSystem implements ISystem {
 
@@ -8,10 +10,10 @@ export default class PlayerSystem implements ISystem {
     windowHeight: number;
 
     // Input
-    movingLeft = false;
-    movingRight = false;
-    shooting = false;
+    keysPressed: {[key: string]: boolean} = {};
     ticksShooting = 0;
+    keydownSubscription: Subscription;
+    keyupSubscription: Subscription;
 
     // Player
     playerWidth: number;
@@ -22,18 +24,42 @@ export default class PlayerSystem implements ISystem {
     spawnBulletCallback: (x: number, y: number) => void;
 
     constructor() {
-        document.addEventListener('keydown', this.onKeydownHandler.bind(this));
-        document.addEventListener('keyup', this.onKeyupHandler.bind(this));
+        this.setupInputSubscriptions();
+    }
+
+    setupInputSubscriptions(): void {
+        this.keydownSubscription = fromEvent(document, 'keydown')
+            .pipe(
+                map(evt => (evt as KeyboardEvent).key),
+                filter(key => ['ArrowLeft', 'ArrowRight', ' '].includes(key))
+            )
+            .subscribe(key => this.keysPressed[key] = true);
+        this.keyupSubscription = fromEvent(document, 'keyup')
+            .pipe(
+                map(evt => (evt as KeyboardEvent).key),
+                filter(key => ['ArrowLeft', 'ArrowRight', ' '].includes(key))
+            )
+            .subscribe(key => {
+                this.keysPressed[key] = false;
+                if (key === ' ') {
+                    this.ticksShooting = 0;
+                }
+            });
+    }
+
+    unsubscribeAll() {
+        this.keydownSubscription.unsubscribe();
+        this.keyupSubscription.unsubscribe();
     }
 
     tick(): void {
-        if (this.movingLeft) {
+        if (this.keysPressed['ArrowLeft']) {
             this.playerOffset = Math.max(0, this.playerOffset - this.playerSpeed);
         }
-        if (this.movingRight) {
+        if (this.keysPressed['ArrowRight']) {
             this.playerOffset = Math.min(this.windowWidth - this.playerWidth, this.playerOffset + this.playerSpeed);
         }
-        if (this.shooting) {
+        if (this.keysPressed[' ']) {
             if (this.ticksShooting % 10 === 0) {
                 this.spawnBulletCallback(
                     this.playerOffset + this.playerWidth / 2,
@@ -66,46 +92,5 @@ export default class PlayerSystem implements ISystem {
             width: this.playerWidth,
             height: this.playerWidth * 0.5
         };
-    }
-
-    onKeydownHandler(evt: KeyboardEvent) {
-        switch (evt.key) {
-            case 'ArrowLeft': {
-                this.movingLeft = true;
-                break;
-            }
-            case 'ArrowRight': {
-                this.movingRight = true;
-                break;
-            }
-            case ' ': {
-                this.shooting = true;
-                break;
-            }
-            default: {
-                return;
-            }
-        }
-    }
-
-    onKeyupHandler(evt: KeyboardEvent) {
-        switch (evt.key) {
-            case 'ArrowLeft': {
-                this.movingLeft = false;
-                break;
-            }
-            case 'ArrowRight': {
-                this.movingRight = false;
-                break;
-            }
-            case ' ': {
-                this.shooting = false;
-                this.ticksShooting = 0;
-                break;
-            }
-            default: {
-                return;
-            }
-        }
     }
 }

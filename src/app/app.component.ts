@@ -4,7 +4,7 @@ import BulletSystem, { Bullet } from './systems/BulletSystem';
 import PlayerSystem from './systems/PlayerSystem';
 import EnemySystem, { Enemy } from './systems/EnemySystem';
 import { HighscoreService, Score } from './services/highscore.service';
-import { Observable } from 'rxjs';
+import { Observable, interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   readonly BACKGROUND_FLASH_COLOR: string = '#00FF41';
 
   // Screen
-  windowPadding: number;
   playWidth: number;
   playHeight: number;
   livesWidth: number;
@@ -28,7 +27,7 @@ export class AppComponent implements OnInit {
   highscore$: Observable<Score>;
   playing = false;
   lives: number;
-  timer: number;
+  timerSubscription: Subscription;
   level: number;
 
   // Systems
@@ -67,13 +66,18 @@ export class AppComponent implements OnInit {
     this.initializeSystems();
 
     // Start loop
-    this.timer = setInterval(this.loop.bind(this), 1000 / 60);
+    this.timerSubscription = interval(1000 / 60).subscribe(tick => {
+      this.loop();
+    });
   }
 
   nextLevel() {
     this.backgroundColor = this.BACKGROUND_COLOR;
     this.flashingTicks = 0;
     this.level++;
+
+    // Unsubscribe listeners
+    this.playerSystem.unsubscribeAll();
 
     // Create systems
     this.systems.set('BulletSystem', new BulletSystem());
@@ -98,9 +102,14 @@ export class AppComponent implements OnInit {
   }
 
   loop(): void {
+    // Tick systems
     this.systems.forEach(system => system.tick());
+
+    // Check for collisions
     this.checkForCollisions();
     this.checkForPlayerCollisions();
+
+    // Check for game over / next level
     const livingEnemies = this.enemySystem.enemies.filter(enemy => enemy.alive);
     if (livingEnemies.length === 0) {
       this.nextLevel();
@@ -110,13 +119,17 @@ export class AppComponent implements OnInit {
       this.endGame();
     }
 
+    // Handle screen flash
     this.handleScreenFlash();
   }
 
   endGame(): void {
     this.highscoreService.uploadHighscore(this.score).subscribe();
     this.playing = false;
-    clearInterval(this.timer);
+
+    // Unsubscribe
+    this.timerSubscription.unsubscribe();
+    this.playerSystem.unsubscribeAll();
   }
 
   loseLife(): void {
@@ -136,10 +149,11 @@ export class AppComponent implements OnInit {
   }
 
   checkForCollisions() {
+    const enemyRect = this.enemySystem.blockSize;
     this.bulletSystem.bullets.forEach(bullet => {
       // Early elimination
-      if (!this.enemyBlockCollidesWithBullet(bullet)) {
-        return;
+      if (!this.enemyBlockCollidesWithBullet(bullet, enemyRect)) {
+       return;
       }
 
       this.enemySystem.enemies.forEach(enemy => {
@@ -158,8 +172,7 @@ export class AppComponent implements OnInit {
       (bullet.y >= rect.y && bullet.y <= rect.y + rect.height);
   }
 
-  enemyBlockCollidesWithBullet(bullet: Bullet) {
-    const rect = this.enemySystem.blockSize;
+  enemyBlockCollidesWithBullet(bullet: Bullet, rect) {
     return (bullet.x >= rect.x && bullet.x <= rect.x + rect.width) &&
       (bullet.y >= rect.y && bullet.y <= rect.y + rect.height);
   }
@@ -178,9 +191,8 @@ export class AppComponent implements OnInit {
   }
 
   updatePlayArea(windowWidth: number, windowHeight: number) {
-    this.windowPadding = windowWidth / 50;
-    this.playWidth = windowWidth - 2 * this.windowPadding;
-    this.playHeight = windowHeight - 2 * this.windowPadding;
+    this.playWidth = windowWidth - windowWidth * 0.04; // Account for padding
+    this.playHeight = windowHeight - windowHeight * 0.04; // Account for padding
     this.livesWidth = windowWidth * 0.4;
   }
 
