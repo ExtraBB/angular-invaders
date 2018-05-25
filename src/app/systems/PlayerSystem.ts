@@ -24,6 +24,7 @@ export default class PlayerSystem implements ISystem {
     constructor() {
         document.addEventListener('keydown', this.onKeydownHandler.bind(this));
         document.addEventListener('keyup', this.onKeyupHandler.bind(this));
+        window.addEventListener('deviceorientation', this.onOrientationChangeHandler, true);
     }
 
     tick(): void {
@@ -106,6 +107,21 @@ export default class PlayerSystem implements ISystem {
             default: {
                 return;
             }
+        }
+    }
+
+    onOrientationChangeHandler(event) {
+        if (event.alpha > 10 && event.alpha < 90) {
+           this.movingRight = true;
+        }
+
+        if (event.alpha > 270 && event.alpha < 350) {
+            this.movingLeft = true;
+        }
+
+        if (event.alpha > 350 || event.alpha < 10) {
+            this.movingLeft = false;
+            this.movingRight = false;
         }
     }
 }
