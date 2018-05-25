@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   playing = false;
   lives: number;
   timer: number;
+  level: number;
 
   // Systems
   systems: Map<string, ISystem> = new Map<string, ISystem>();
@@ -54,6 +55,7 @@ export class AppComponent implements OnInit {
     this.lives = 3;
     this.backgroundColor = this.BACKGROUND_COLOR;
     this.flashingTicks = 0;
+    this.level = 0;
 
     // Set play area
     this.updatePlayArea(window.innerWidth, window.innerHeight);
@@ -61,11 +63,23 @@ export class AppComponent implements OnInit {
     // Create systems
     this.systems.set('BulletSystem', new BulletSystem());
     this.systems.set('PlayerSystem', new PlayerSystem());
-    this.systems.set('EnemySystem', new EnemySystem());
+    this.systems.set('EnemySystem', new EnemySystem(this.level));
     this.initializeSystems();
 
     // Start loop
     this.timer = setInterval(this.loop.bind(this), 1000 / 60);
+  }
+
+  nextLevel() {
+    this.backgroundColor = this.BACKGROUND_COLOR;
+    this.flashingTicks = 0;
+    this.level++;
+
+    // Create systems
+    this.systems.set('BulletSystem', new BulletSystem());
+    this.systems.set('PlayerSystem', new PlayerSystem());
+    this.systems.set('EnemySystem', new EnemySystem(this.level));
+    this.initializeSystems();
   }
 
   initializeSystems() {
@@ -87,9 +101,10 @@ export class AppComponent implements OnInit {
     this.systems.forEach(system => system.tick());
     this.checkForCollisions();
     this.checkForPlayerCollisions();
-    if (this.enemySystem.enemies.every(enemy => !enemy.alive)) {
-      this.endGame();
-    } else if (this.enemySystem.enemies.reduce((a, b) => a.y < b.y ? a : b).y < 0) {
+    const livingEnemies = this.enemySystem.enemies.filter(enemy => enemy.alive);
+    if (livingEnemies.length === 0) {
+      this.nextLevel();
+    } else if (Math.min(...livingEnemies.map(enemy => enemy.y)) < 0) {
       this.endGame();
     } else if (this.lives < 1) {
       this.endGame();
@@ -107,7 +122,7 @@ export class AppComponent implements OnInit {
   loseLife(): void {
     this.enemySystem.resetEnemyPositions();
     this.lives--;
-    this.backgroundColor = '#00FF41';
+    this.backgroundColor = this.BACKGROUND_FLASH_COLOR;
   }
 
   handleScreenFlash() {
