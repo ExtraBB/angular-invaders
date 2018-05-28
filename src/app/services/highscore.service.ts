@@ -15,7 +15,7 @@ export class HighscoreService {
   constructor(private db: AngularFireDatabase) { }
 
   uploadHighscore(score: number, player: string) {
-    return this.db.list('scores').push({score, player});
+    return this.db.list('scores').push({ score, player });
   }
 
   getHighscores(): Observable<any[]> {
@@ -24,9 +24,10 @@ export class HighscoreService {
   }
 
   getHighscore(): Observable<Score> {
-    return this.db.list('scores').valueChanges().pipe(
-      map(res => res as Score[]),
-      map((res, []) => res.reduce((a, b) => a.score > b.score ? a : b))
-    );
+    return this.db.list('scores',
+        ref => ref.orderByChild('score').limitToLast(1))
+      .valueChanges().pipe(
+        map(res => res[0] as Score)
+      );
   }
 }

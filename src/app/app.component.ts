@@ -21,10 +21,12 @@ export class AppComponent implements OnInit {
   livesWidth: number;
   backgroundColor = this.BACKGROUND_COLOR;
   flashingTicks = 0;
+  showHighscoreInput = false;
 
   // Game
   score: number;
   highscore$: Observable<Score>;
+  currentHighscore: Score;
   playing = false;
   lives: number;
   timerSubscription: Subscription;
@@ -46,6 +48,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.highscore$ = this.highscoreService.getHighscore();
+    this.highscore$.subscribe(nextScore => {
+      this.currentHighscore = nextScore;
+    });
   }
 
   startGame() {
@@ -123,8 +128,15 @@ export class AppComponent implements OnInit {
     this.handleScreenFlash();
   }
 
+  uploadScoreForPlayer(player: string): void {
+    this.showHighscoreInput = false;
+    this.highscoreService.uploadHighscore(this.score, player);
+  }
+
   endGame(): void {
-    this.highscoreService.uploadHighscore(this.score, 'test-player');
+    if (this.score > this.currentHighscore.score) {
+      this.showHighscoreInput = true;
+    }
     this.playing = false;
 
     // Unsubscribe

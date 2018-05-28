@@ -1,0 +1,9 @@
+<div class="highscore-input">
+  <div class="highscore-input-title">
+    New Highscore!
+  </div>
+  <input class="highscore-input-field" type="text" placeholder="Player name..." #box />
+  <div class="highscore-input-upload-button" (click)="upload.emit(box.value);">
+    Upload
+  </div>
+</div>

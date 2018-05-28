@@ -21,9 +21,11 @@
     </div>
 </div>
 
-<div *ngIf="!playing" (click)="startGame();">
+<div *ngIf="!playing">
     <app-score class="score" title="Score" score={{score}}></app-score>    
     <app-score class="highscore" title="High Score" [score]="(highscore$ | async)?.score"></app-score>
-    <div class="play-button"> Play </div>
+    <div class="play-button" (click)="startGame();"> Play </div>
     <div class="created-by">Created by <a class="link" href="http://www.brunocarvalhal.com">Bruno Carvalhal</a></div>
 </div>
+
+<app-highscore-input *ngIf="showHighscoreInput" (highscoreEntered)="uploadScoreForPlayer($event)"></app-highscore-input>
