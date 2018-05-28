@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, reduce, tap} from 'rxjs/operators';
-
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+import { map, reduce } from 'rxjs/operators';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 export class Score {
-  id: number;
   score: number;
   player: string;
 }
@@ -17,22 +12,21 @@ export class Score {
   providedIn: 'root'
 })
 export class HighscoreService {
+  constructor(private db: AngularFireDatabase) { }
 
-  private highscoreUrl = 'api/highscores';
-
-  constructor(private http: HttpClient) { }
-
-  uploadHighscore(score: number): Observable<Score> {
-    return this.http.post<Score>(this.highscoreUrl, { score, player: 'Test Player' }, httpOptions);
+  uploadHighscore(score: number, player: string) {
+    return this.db.list('scores').push({score, player});
   }
 
-  getHighscores(): Observable<Score[]> {
-    return this.http.get<Score[]>(this.highscoreUrl);
+  getHighscores(): Observable<any[]> {
+    return this.db.list('scores').valueChanges().pipe(
+      map(res => res as Score[]));
   }
 
   getHighscore(): Observable<Score> {
-    return this.http.get<Score[]>(this.highscoreUrl).pipe(
-      map(res => res.reduce((a, b) => a.score > b.score ? a : b))
+    return this.db.list('scores').valueChanges().pipe(
+      map(res => res as Score[]),
+      map((res, []) => res.reduce((a, b) => a.score > b.score ? a : b))
     );
   }
 }

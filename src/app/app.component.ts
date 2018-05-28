@@ -124,7 +124,7 @@ export class AppComponent implements OnInit {
   }
 
   endGame(): void {
-    this.highscoreService.uploadHighscore(this.score).subscribe();
+    this.highscoreService.uploadHighscore(this.score, 'test-player');
     this.playing = false;
 
     // Unsubscribe
