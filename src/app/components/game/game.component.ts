@@ -1,9 +1,9 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import ISystem from '../systems/ISystem';
-import BulletSystem, { Bullet } from '../systems/BulletSystem';
-import PlayerSystem from '../systems/PlayerSystem';
-import EnemySystem, { Enemy } from '../systems/EnemySystem';
-import { HighscoreService, Score } from '../services/highscore.service';
+import ISystem from '../../systems/ISystem';
+import BulletSystem, { Bullet } from '../../systems/BulletSystem';
+import PlayerSystem from '../../systems/PlayerSystem';
+import EnemySystem, { Enemy } from '../../systems/EnemySystem';
+import { HighscoreService, Score } from '../../services/highscore.service';
 import { Observable, interval, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 

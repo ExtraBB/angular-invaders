@@ -6,16 +6,16 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
-import { ScoreComponent } from './score/score.component';
-import { PlayerComponent } from './player/player.component';
-import { BulletComponent } from './bullet/bullet.component';
-import { EnemyComponent } from './enemy/enemy.component';
-import { LivesComponent } from './lives/lives.component';
-import { HighscoreInputComponent } from './highscore-input/highscore-input.component';
-import { AppRoutingModule } from './/app-routing.module';
-import { GameComponent } from './game/game.component';
-import { MainMenuComponent } from './main-menu/main-menu.component';
-import { HighscoresComponent } from './highscores/highscores.component';
+import { ScoreComponent } from './components/score/score.component';
+import { PlayerComponent } from './components/player/player.component';
+import { BulletComponent } from './components/bullet/bullet.component';
+import { EnemyComponent } from './components/enemy/enemy.component';
+import { LivesComponent } from './components/lives/lives.component';
+import { HighscoreInputComponent } from './components/highscore-input/highscore-input.component';
+import { AppRoutingModule } from './app-routing.module';
+import { GameComponent } from './components/game/game.component';
+import { MainMenuComponent } from './components/main-menu/main-menu.component';
+import { HighscoresComponent } from './components/highscores/highscores.component';
 import { ReversePipe } from './pipes/reverse.pipe';
 
 @NgModule({
