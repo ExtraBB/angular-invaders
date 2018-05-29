@@ -1,6 +1,6 @@
 # Angular Invaders
 
-This project was created to play around with Angular. It is loosely designed like an ECS (no components) and has a game loop. 
+This project was created to play around with Angular. It is loosely designed like an ECS (no components) and has a game loop. Currently there is **no support for mobile**. I might add that in the future. (device tilting for controlling the ship would be awesome)
 
 ## Demo
 
