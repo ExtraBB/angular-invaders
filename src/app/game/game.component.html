@@ -1,8 +1,8 @@
-<div class="outer-container" [style.padding]="windowPadding + 'px'" [style.background-color]="backgroundColor">
+<div class="outer-container" [style.background-color]="backgroundColor">
   <div class="inner-container">
     <app-score class="score" title="SCORE" score={{score}}></app-score>
     <app-lives class="lives" width={{livesWidth}} numberOfLives={{lives}}></app-lives>
-    <app-player width={{playerSystem.playerWidth}} offset={{playerSystem.playerOffset}} (spawnBullet)="spawnBullet($event)"></app-player>
+    <app-player width={{playerSystem.playerWidth}} offset={{playerSystem.playerOffset}}></app-player>
     <app-bullet *ngFor="let bullet of bulletSystem.bullets" width={{bulletSystem.bulletWidth}} height={{bulletSystem.bulletHeight}}
       x={{bullet.x}} y={{bullet.y}}></app-bullet>
     <app-bullet *ngFor="let bullet of bulletSystem.enemyBullets" width={{bulletSystem.enemyBulletWidth}} height={{bulletSystem.enemyBulletHeight}}

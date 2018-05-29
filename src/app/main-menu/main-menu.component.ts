@@ -11,7 +11,7 @@ export class MainMenuComponent implements OnInit {
 
   highscore$: Observable<Score>;
 
-  constructor(private highscoreService: HighscoreService) {
+  constructor(public highscoreService: HighscoreService) {
 
   }
 
