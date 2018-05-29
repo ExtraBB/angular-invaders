@@ -4,7 +4,7 @@ This project was created to play around with Angular. It is loosely designed lik
 
 ## Demo
 
-You can try a live demo at: `http://invaders.brunocarvalhal.com`.
+You can try a live demo at: http://invaders.brunocarvalhal.com.
 
 ## Development server
 
