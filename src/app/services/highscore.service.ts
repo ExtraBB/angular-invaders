@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, reduce } from 'rxjs/operators';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { auth } from 'firebase/app';
 
 export class Score {
   score: number;
@@ -12,7 +14,12 @@ export class Score {
   providedIn: 'root'
 })
 export class HighscoreService {
-  constructor(private db: AngularFireDatabase) { }
+
+  constructor(private db: AngularFireDatabase, private afAuth: AngularFireAuth) {
+    this.afAuth.auth.signInAnonymously().catch(function (error) {
+      console.log(error);
+    });
+  }
 
   uploadHighscore(score: number, player: string) {
     return this.db.list('scores').push({ score, player });
