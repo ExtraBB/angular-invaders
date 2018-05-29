@@ -1,0 +1,17 @@
+.outer-container {
+    width: 96vw;
+    height: 96vh;
+    padding: 2vh 2vw;
+}
+
+.inner-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.score {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+}

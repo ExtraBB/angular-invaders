@@ -1,0 +1,7 @@
+<div class="highscores-container">
+  <div class="back-button" routerLink="">BACK</div>
+  <div class="highscores-title">HIGHSCORES</div>
+  <ol class="highscores-list">
+    <li *ngFor="let score of highscores$ | async | reverse">{{score.player}} - {{score.score}}</li>
+  </ol>
+</div>

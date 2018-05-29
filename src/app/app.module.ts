@@ -12,6 +12,11 @@ import { BulletComponent } from './bullet/bullet.component';
 import { EnemyComponent } from './enemy/enemy.component';
 import { LivesComponent } from './lives/lives.component';
 import { HighscoreInputComponent } from './highscore-input/highscore-input.component';
+import { AppRoutingModule } from './/app-routing.module';
+import { GameComponent } from './game/game.component';
+import { MainMenuComponent } from './main-menu/main-menu.component';
+import { HighscoresComponent } from './highscores/highscores.component';
+import { ReversePipe } from './pipes/reverse.pipe';
 
 @NgModule({
   declarations: [
@@ -21,13 +26,18 @@ import { HighscoreInputComponent } from './highscore-input/highscore-input.compo
     BulletComponent,
     EnemyComponent,
     LivesComponent,
-    HighscoreInputComponent
+    HighscoreInputComponent,
+    GameComponent,
+    MainMenuComponent,
+    HighscoresComponent,
+    ReversePipe
   ],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

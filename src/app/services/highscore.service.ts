@@ -15,6 +15,8 @@ export class Score {
 })
 export class HighscoreService {
 
+  lastScore: number;
+
   constructor(private db: AngularFireDatabase, private afAuth: AngularFireAuth) {
     this.afAuth.auth.signInAnonymously().catch(function (error) {
       console.log(error);
@@ -25,8 +27,10 @@ export class HighscoreService {
     return this.db.list('scores').push({ score, player });
   }
 
-  getHighscores(): Observable<any[]> {
-    return this.db.list('scores').valueChanges().pipe(
+  getHighscores(limit: number = 50): Observable<any[]> {
+    return this.db.list('scores',
+      ref => ref.orderByChild('score').limitToLast(limit)
+    ).valueChanges().pipe(
       map(res => res as Score[]));
   }
 

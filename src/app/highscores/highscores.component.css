@@ -1,0 +1,28 @@
+.highscores-container {
+    font-size: 4vw;
+}
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    cursor:pointer;
+}
+
+.back-button:hover {
+    color: #00FF41;
+}
+
+.highscores-title {
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    transform: translateX(-50%);
+}
+
+.highscores-list {
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+}

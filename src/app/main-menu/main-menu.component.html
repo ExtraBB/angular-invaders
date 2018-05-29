@@ -1,0 +1,11 @@
+<div>
+  <app-score class="score" title="SCORE" score={{highscoreService.lastScore}}></app-score>
+  <app-score class="highscore" title="HIGH SCORE" [score]="(highscore$ | async)?.score"></app-score>
+  <div class="play-button" routerLink="/play"> PLAY </div>
+  <div class="created-by">Created by
+    <a class="link" href="http://www.brunocarvalhal.com">Bruno Carvalhal</a>
+  </div>
+  <div class="highscores-button">
+    <a class="link" routerLink="highscores" >HIGH SCORES</a>
+  </div>
+</div>

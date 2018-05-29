@@ -1,0 +1,16 @@
+<div class="outer-container" [style.padding]="windowPadding + 'px'" [style.background-color]="backgroundColor">
+  <div class="inner-container">
+    <app-score class="score" title="SCORE" score={{score}}></app-score>
+    <app-lives class="lives" width={{livesWidth}} numberOfLives={{lives}}></app-lives>
+    <app-player width={{playerSystem.playerWidth}} offset={{playerSystem.playerOffset}} (spawnBullet)="spawnBullet($event)"></app-player>
+    <app-bullet *ngFor="let bullet of bulletSystem.bullets" width={{bulletSystem.bulletWidth}} height={{bulletSystem.bulletHeight}}
+      x={{bullet.x}} y={{bullet.y}}></app-bullet>
+    <app-bullet *ngFor="let bullet of bulletSystem.enemyBullets" width={{bulletSystem.enemyBulletWidth}} height={{bulletSystem.enemyBulletHeight}}
+      x={{bullet.x}} y={{bullet.y}}></app-bullet>
+    <div *ngFor="let enemy of enemySystem.enemies">
+      <app-enemy *ngIf="enemy.alive" imagePath={{enemy.imagePath}} width={{enemySystem.enemyWidth}} x={{enemy.x}} y={{enemy.y}}></app-enemy>
+    </div>
+  </div>
+</div>
+
+<app-highscore-input *ngIf="showHighscoreInput" (highscoreEntered)="uploadScoreForPlayer($event)"></app-highscore-input>
